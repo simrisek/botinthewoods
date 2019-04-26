@@ -56,7 +56,7 @@ function ForestGenerator(forestOptions, treeOptions) {
     var SKY_COL, GROUND_COL, GROUND_COLS, VEG_COLS, STONE_COLS;
 
     var _RIDGE_Z1 = 700;
-    var _RIDGE_Z2 = 800;
+    var _RIDGE_Z2 = 900;
 
     
 
@@ -206,8 +206,8 @@ function ForestGenerator(forestOptions, treeOptions) {
         for(var i=0; i<400/stepSize; i++){
 
             var numStonesInCluster = _r.random(10,20);
-            var clusterRadius = _r.random(1,3);
-            var minSize = 0.07, maxSize = 0.3;
+            var clusterRadius = _r.random(1,5);
+            var minSize = 0.1, maxSize = 0.7;
         
             var cluster = new THREE.Object3D();    
             for(var s=0; s<numStonesInCluster; s++){
@@ -516,11 +516,21 @@ function ForestGenerator(forestOptions, treeOptions) {
 
     function _bushColors(){
         var cols = [];
-        var bushBase = _c.mixHexCols(_c.randomHex(),_decid.options.COLOR_BTM,0.3,0.7);
-        bushBase = _c.mixHexCols(bushBase,GROUND_COL,0.4,0.6);
-        for (i = 0; i < 4; i++){
+        var tempBase;
+        var bushBase;
+        if(_decid.options.RAINBOW){
+            tempBase = options.NIGHT_MODE ? "#000000" : "#888888";
+            bushBase = _c.mixHexCols(tempBase,GROUND_COL,0.4,0.6); 
+            cols.push(bushBase);
             cols.push(_c.variationsOn(bushBase, 20));
+        } else {
+            tempBase = _c.mixHexCols(_c.randomHex(),_decid.options.COLOR_BTM,0.3,0.7);
+            bushBase = _c.mixHexCols(tempBase,GROUND_COL,0.4,0.6);
+            for (i = 0; i < 4; i++){
+                cols.push(_c.variationsOn(bushBase, 20));
+            }
         }
+
         return cols;
     }
 
@@ -577,8 +587,9 @@ function ForestGenerator(forestOptions, treeOptions) {
 
         var backBushCols = [];
         for(var i=0; i<bushColors.length; i++){
-            backBushCols.push(_c.brightenByAmt(bushColors[i],_r.random(-10,10)));
+            backBushCols.push(_decid.options.RAINBOW ? bushColors[i] : _c.brightenByAmt(bushColors[i],_r.random(-10,10)));
         }
+        
 
         console.log("{}{} "+numBushes);
         
@@ -601,7 +612,7 @@ function ForestGenerator(forestOptions, treeOptions) {
         var numBackBushes = Math.max(60,NUM_TREES*0.6);
         for (i = 0; i < NUM_TREES*0.6; i++) {
             var newBush = _bush(_r.random(bushHeight*50,bushHeight*80),bushWidth*8,backBushCols,leafSize*4, leafWidth*4);
-            newBush.position.z = _r.random(_RIDGE_Z1, _RIDGE_Z2);
+            newBush.position.z = _r.random(_RIDGE_Z2 - (_RIDGE_Z2-_RIDGE_Z1)/4, _RIDGE_Z2);
             newBush.position.x = _r.randomSign(_r.random(0,300));
             newBush.position.y = -10;
             _forest.add(newBush);
@@ -646,7 +657,7 @@ function ForestGenerator(forestOptions, treeOptions) {
 
             f.rotation.x += _r.random(- 0.3, 0.3);
             f.rotation.z += _r.random(- 0.3, 0.3);
-            f.scale.x = f.scale.y = f.scale.z = _r.random(0.5, 1);
+            f.scale.x = f.scale.y = f.scale.z = _r.random(1, 2);
             //f.position.y = 5;
             newPath.add(f);
         }
@@ -846,10 +857,10 @@ function ForestGenerator(forestOptions, treeOptions) {
             } else {
                 //add the last trees to the bush ridge at the back of the scene
                 // don't bother with the ground leaves, we can't see well that far back.
-                wrappedTree.position.z = _r.random(_RIDGE_Z1*0.8, _RIDGE_Z2);
+                wrappedTree.position.z = _r.random(_RIDGE_Z1-(_RIDGE_Z2-_RIDGE_Z1)/4, _RIDGE_Z1);
 
                 // let's test grouping these all closer.
-                wrappedTree.position.x =  _r.randomSign(xPositions[i] + ((i < 12)? _r.random(3,5) : 0));          
+                wrappedTree.position.x =  _r.randomSign(xPositions[i]*1.5 + ((i < 12)? _r.random(3,5) : 0));          
 
             }
 
@@ -1017,7 +1028,7 @@ function ForestGenerator(forestOptions, treeOptions) {
             var hillRadius = _r.randomInt(10,120);
             var hillColor = _r.randomFrom(GROUND_COLS); 
             var hill = _buildHill(hillRadius, hillColor);
-            hill.scale.y = _r.random(0.05, 0.15)*baseScale;
+            hill.scale.y = _r.random(0.2, 0.8)*baseScale;
 
             var xSpread = 50 + i*10;
             xSpread = i*10 + hillRadius;
@@ -1094,7 +1105,7 @@ function ForestGenerator(forestOptions, treeOptions) {
         }
 
        scene.add(_forest);   
-       _forest.position.z = _r.random(-20,80);
+       _forest.position.z = _r.random(0,-20);
        //_forest.position.z = -_r.random(40,80);
     }
 

@@ -327,15 +327,15 @@ function DeciduousTrees(options) {
         
 
         if(_rainbow){
-            //_options.COLOR_TOP = _c.randomHex();
-            _options.COLOR_TOP = _c.variationsOn(_options.COLOR_TOP,50);
-            _options.COLOR_BTM = _c.brightenByAmt(_options.COLOR_TOP,-100); 
+            _options.COLOR_TOP = _c.randomHex();
+            //_options.COLOR_TOP = _c.variationsOn(_options.COLOR_TOP,90);
+            _options.COLOR_BTM = _c.brightenByAmt(_options.COLOR_TOP,-120); 
 
-            var leafBaseColor = _c.variationsOn(LEAF_BASE_COLOR, 50);
-            //var leafBaseColor = _c.randomHex();
+            //var leafBaseColor = _c.variationsOn(LEAF_BASE_COLOR, 30);
+            var leafBaseColor = _c.randomHex();
             _options.LEAF_COLS = [];
-            for (i = 0; i < 3; i++){
-                _options.LEAF_COLS.push(_c.variationsOn(leafBaseColor, 50));
+            for (i = 0; i < 4; i++){
+                _options.LEAF_COLS.push(_c.variationsOn(leafBaseColor, 25));
             }
         }
         
@@ -426,7 +426,7 @@ function DeciduousTrees(options) {
             ANGLE_MIN: _r.random(15, 45), 
             ANGLE_MAX: _r.random(60, 120), 
             COLOR_TOP: top_color,
-            COLOR_BTM: _c.brightenByAmt(top_color, -80),
+            COLOR_BTM: _c.brightenByAmt(top_color, -100),
             LEAF_COLS: leafColors, 
             LEAF_SIZE: _pickLeafSize(),
             LEAF_DENSITY: _r.randomInt(24),
