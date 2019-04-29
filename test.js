@@ -28,7 +28,7 @@ var forestOptions = {
         LENGTH_MULT: _r.random(0.7, 0.9),
         ANGLE_MIN: _r.random(15, 45), 
         ANGLE_MAX: _r.random(60, 90), 
-        RAINBOW: true,
+        RAINBOW: false,
         COLOR_TOP: colorHelper.randomHex(), 
         COLOR_BTM: colorHelper.brightenByAmt(colorHelper.randomHex(),-120), 
         //LEAF_COLS: ["#FFCC00","#EEEE44","#FF0055","#EE9922","#EE0505","#DD4400","#FF9977","#BEB344"], 

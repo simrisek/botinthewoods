@@ -469,15 +469,16 @@ function ForestGenerator(forestOptions, treeOptions) {
         return leaf;
     }
 
-    function _circleMesh(col, radius, opacity) {
+    function _circleMesh(col, radius, sides) {
 
-        var geometry = new THREE.CircleGeometry(radius, 8);
+        var numSides = sides || 8;
+        var geometry = new THREE.CircleGeometry(radius, numSides);
 
         var material = new THREE.MeshLambertMaterial( { 
             color: _rainbow ? _c.parseHex(_c.randomHex()) : _c.parseHex(col),
             transparent: true 
         });
-        material.opacity = opacity;
+        material.opacity = 1.0;
 
         return new THREE.Mesh(geometry, material);
     }
@@ -507,9 +508,9 @@ function ForestGenerator(forestOptions, treeOptions) {
      * 
      * @return {THREE.Mesh}     -- the "mountain"
      */
-    function _buildHill(size,col) {
+    function _buildHill(size,col,sides) {
 
-        var hill = _circleMesh(col,size);
+        var hill = _circleMesh(col,size,sides);
         hill.rotation.x = -Math.PI;
         return hill;
     }
@@ -1023,19 +1024,25 @@ function ForestGenerator(forestOptions, treeOptions) {
      */
     function _buildHills(){
         var numHills = NUM_TREES;
-        var baseScale = _r.random(1,2);
+        var baseScale = _r.random(2,4);
         for (var i = 0; i < numHills; i++) {
+            var rearHill = i>numHills*0.7;
             var hillRadius = _r.randomInt(10,120);
             var hillColor = _r.randomFrom(GROUND_COLS); 
-            var hill = _buildHill(hillRadius, hillColor);
-            hill.scale.y = _r.random(0.2, 0.8)*baseScale;
-
+            //var hillColor = (rearHill ? "#FFFF00" : "#FF00FF");
+            var hill = _buildHill(hillRadius, hillColor, 16);
+            //hill.rotation.z = Math.PI/6;
             var xSpread = 50 + i*10;
             xSpread = i*10 + hillRadius;
-            var zSpread = 600/numHills;
+            var zSpread = 500/numHills;
+            
+            hill.scale.y = _r.random(0.005, 0.2)*baseScale;
+
             hill.position.z = i * zSpread;
             hill.position.x = _r.random(-xSpread/2 - 5, xSpread/2 + 5);
-            hill.position.y = i*0.22 - hillRadius*hill.scale.y;
+            hill.position.y = i*0.3 - hillRadius*hill.scale.y + (rearHill ? 3 : 0);
+
+            
             _forest.add(hill);
         }
     }
