@@ -611,10 +611,10 @@ function ForestGenerator(forestOptions, treeOptions) {
         }
 
         var numBackBushes = Math.max(60,NUM_TREES*0.6);
-        for (i = 0; i < NUM_TREES*0.6; i++) {
+        for (i = 0; i < NUM_TREES; i++) {
             var newBush = _bush(_r.random(bushHeight*50,bushHeight*80),bushWidth*8,backBushCols,leafSize*4, leafWidth*4);
             newBush.position.z = _r.random(_RIDGE_Z2 - (_RIDGE_Z2-_RIDGE_Z1)/4, _RIDGE_Z2);
-            newBush.position.x = _r.randomSign(_r.random(0,300));
+            newBush.position.x = _r.randomSign(_r.random(0,500));
             newBush.position.y = -10;
             _forest.add(newBush);
         }
@@ -1040,7 +1040,7 @@ function ForestGenerator(forestOptions, treeOptions) {
 
             hill.position.z = i * zSpread;
             hill.position.x = _r.random(-xSpread/2 - 5, xSpread/2 + 5);
-            hill.position.y = i*0.3 - hillRadius*hill.scale.y + (rearHill ? 3 : 0);
+            hill.position.y = i*0.3 - hillRadius*hill.scale.y + (rearHill ? 1 : 0);
 
             
             _forest.add(hill);
