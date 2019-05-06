@@ -38,7 +38,7 @@ var forestOptions = {
         LEAF_W: _r.random(0.7,1.2),
         MAX_DEPTH: 12, 
         // MAX_BRANCHES_TOTAL: 999, 
-        MAX_BRANCHES_PER_NODE:  2
+        MAX_BRANCHES_PER_NODE:  _r.randomInt(2,3)
     };
 
 function _newForest(numFrames){    
