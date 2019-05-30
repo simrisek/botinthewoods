@@ -145,10 +145,10 @@ function ForestGenerator(forestOptions, treeOptions) {
         var i;
 
         // The sky and ground are a pastel blue and a muddy green, randomly permuted
-        //SKY_COL = NIGHT_MODE ? (_decid.options.RAINBOW? _c.variationsOn("#222222", 20) : _c.variationsOn("#4d6876", 120)) : (_decid.options.RAINBOW? _c.variationsOn("#F0F0F0", 50) : _c.variationsOn("#bdeff1", 150));
-        //GROUND_COL = NIGHT_MODE ? (_decid.options.RAINBOW? _c.variationsOn("#111111", 30) : _c.variationsOn("#40523c", 80)) : _c.brightenByAmt(_c.variationsOn("#78836e", 150),_r.randomInt(-25,-75));
-        SKY_COL = NIGHT_MODE ? _c.variationsOn("#4d6876", 120) : _c.variationsOn("#bdeff1", 150);
-        GROUND_COL = NIGHT_MODE ? _c.variationsOn("#40523c", 80) : _c.brightenByAmt(_c.variationsOn("#78836e", 150),_r.randomInt(-25,-75));
+        SKY_COL = NIGHT_MODE ? (_decid.options.RAINBOW? _c.variationsOn("#222222", 20) : _c.variationsOn("#4d6876", 120)) : (_decid.options.RAINBOW? _c.variationsOn("#F0F0F0", 50) : _c.variationsOn("#bdeff1", 150));
+        GROUND_COL = NIGHT_MODE ? (_decid.options.RAINBOW? _c.variationsOn("#111111", 30) : _c.variationsOn("#40523c", 80)) : _c.brightenByAmt(_c.variationsOn("#78836e", 150),_r.randomInt(-25,-75));
+        //SKY_COL = NIGHT_MODE ? _c.variationsOn("#4d6876", 120) : _c.variationsOn("#bdeff1", 150);
+        //GROUND_COL = NIGHT_MODE ? _c.variationsOn("#40523c", 80) : _c.brightenByAmt(_c.variationsOn("#78836e", 150),_r.randomInt(-25,-75));
        
 
         // There are leaves on the ground too.  They match the ground, which varies slightly.
@@ -615,7 +615,7 @@ function ForestGenerator(forestOptions, treeOptions) {
             var newBush = _bush(_r.random(bushHeight*50,bushHeight*80),bushWidth*8,backBushCols,leafSize*4, leafWidth*4);
             newBush.position.z = _r.random(_RIDGE_Z2 - (_RIDGE_Z2-_RIDGE_Z1)/4, _RIDGE_Z2);
             newBush.position.x = _r.randomSign(_r.random(0,500));
-            newBush.position.y = -10;
+            newBush.position.y = -1;
             _forest.add(newBush);
         }
     }
@@ -886,17 +886,20 @@ function ForestGenerator(forestOptions, treeOptions) {
     function _grassBlade(){
 
         let grassHeight = _r.randomInt(5,8);
-        let grassWidth = 0.25;
+        let grassWidth = 0.6;
         let grassCol = _rainbow ? _c.randomHex() : _c.brightenByAmt(_r.randomFrom(GROUND_COLS),-10);
-        let bend = _r.random(0,0.1);
+        let bend = _r.random(0,0.3);
         //(baseLength, distanceFromTip, distanceFromRoot, fullTreeDepth, minRad, maxRad)
         var root = _grassSegment(0.01, grassHeight, 0, grassHeight, grassWidth, grassWidth, grassCol);
         let workingRoot = root;
         for (let i = 0; i < grassHeight; i++) {
-            
-            let segment = _grassSegment(_treeOptions.BRANCH_L/8, grassHeight-i, i, grassHeight, grassWidth*((grassHeight-(i+1))/grassHeight), grassWidth*((grassHeight -i)/grassHeight), grassCol);
 
-            segment.scale.x = 0.1;
+            var topRad = grassWidth*((grassHeight-(i+1))/grassHeight);
+            var botRad = grassWidth*((grassHeight -i)/grassHeight);
+            
+            let segment = _grassSegment(_treeOptions.BRANCH_L/8, grassHeight-i, i, grassHeight, topRad, botRad, grassCol);
+
+            segment.scale.x = 0.05;
             segment.rotation.x = bend;
             workingRoot.tip.add(segment);
             workingRoot = segment;
@@ -935,8 +938,8 @@ function ForestGenerator(forestOptions, treeOptions) {
             length *= 2;
         }
 
-        var radiusBottom = baseRadius(distanceFromTip, distanceFromRoot);
-        var radiusTop = baseRadius(Math.max(0, distanceFromTip - 1), distanceFromRoot + 1);
+        var radiusBottom = maxRad;//baseRadius(distanceFromTip, distanceFromRoot);
+        var radiusTop = minRad;//baseRadius(Math.max(0, distanceFromTip - 1), distanceFromRoot + 1);
 
         var cylGeom = new THREE.CylinderGeometry(radiusTop, radiusBottom, length, 4);
         var sphGeom = new THREE.SphereGeometry(radiusTop, 2, 2);
@@ -986,8 +989,8 @@ function ForestGenerator(forestOptions, treeOptions) {
 
     function _growGrass(){
         var patchSize = _forestOptions.GRASS_DENSITY;
-        let clusterSize = _r.random(0,2);
-        let numInCluster = _r.random(4,10);
+        let numInCluster = _r.random(4,patchSize/NUM_TREES);
+        let clusterSize = _r.random(2,6);
         if(_forestOptions.GRASS_DENSITY==0){
             return;
         }
@@ -1006,11 +1009,12 @@ function ForestGenerator(forestOptions, treeOptions) {
                     blade.position.x = clumpPos.x + _r.randomSign(_r.random(0,clusterSize));
                     blade.position.y = clumpPos.y + _r.randomSign(_r.random(0,clusterSize));
                     blade.position.z = clumpPos.z + _r.randomSign(_r.random(0,clusterSize));
-                    blade.scale.x = blade.scale.y = blade.scale.z = 0.3;
+                    blade.scale.x = blade.scale.z = _r.random(0.3,1);
+                    blade.scale.y = blade.scale.x*1.5;
                     _forest.add(blade);
                 }
                 
-                numInCluster = _r.randomInt(4,10);
+                numInCluster = _r.randomInt(4,patchSize/NUM_TREES);
             }
         }
     }

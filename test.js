@@ -13,31 +13,31 @@ var forestOptions = {
         RAINBOW: false,
         NUM_TREES: _r.randomInt(30,50),
         TREE_TYPE: "deciduous",
-        GRASS_DENSITY: 0,
+        GRASS_DENSITY: _r.random(200,500),
         PATH_MODE: false,
         //NIGHT_MODE: true,
         EFFECT: false
     };
 
     var treeOptions = {
-        BRANCH_R_MAX: _r.random(0.8,2.4),
+        BRANCH_R_MAX: _r.random(0.8,3),
         BRANCH_R_MIN: 0.06,
-        BRANCH_L: _r.random(8,15), 
-        BRANCH_P: _r.random(0.72, 0.79),
-        CHANCE_DECAY: _r.random(0.01,0.03),
+        BRANCH_L: _r.random(8,30), 
+        BRANCH_P: 0.77,//_r.random(0.72, 0.83),
+        CHANCE_DECAY: _r.random(0.005,0.03),
         LENGTH_MULT: _r.random(0.7, 0.9),
-        ANGLE_MIN: _r.random(15, 45), 
-        ANGLE_MAX: _r.random(60, 90), 
+        ANGLE_MIN: _r.random(15, 30), 
+        ANGLE_MAX: _r.random(50, 70), 
         RAINBOW: false,
         COLOR_TOP: colorHelper.randomHex(), 
-        COLOR_BTM: colorHelper.brightenByAmt(colorHelper.randomHex(),-120), 
-        //LEAF_COLS: ["#FFCC00","#EEEE44","#FF0055","#EE9922","#EE0505","#DD4400","#FF9977","#BEB344"], 
+        COLOR_BTM: "#002244", //colorHelper.brightenByAmt(colorHelper.randomHex(),-120), 
+        //LEAF_COLS: ["#FFFFDD","#FFEEDD","#EEFFDD","#EEEEDD","#EEEECC","#FFEECC","#EEFFCC","#FFFFCC"], 
         //LEAF_COLS: ["#2A141D","#1B0005","#2A2B05","#161102","#231313","#0F0F1B","#181D11","#4E430F"], 
         // LEAF_SIZE: _pickLeafSize(),
         LEAF_DENSITY: _r.randomInt(10,20),
         LEAF_W: _r.random(0.7,1.2),
-        MAX_DEPTH: 12, 
-        // MAX_BRANCHES_TOTAL: 999, 
+        MAX_DEPTH: 15, 
+        MAX_BRANCHES_TOTAL: 1999, 
         MAX_BRANCHES_PER_NODE:  _r.randomInt(2,3)
     };
 
