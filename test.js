@@ -13,7 +13,7 @@ var forestOptions = {
         RAINBOW: false,
         NUM_TREES: _r.randomInt(30,50),
         TREE_TYPE: "deciduous",
-        GRASS_DENSITY: _r.random(200,500),
+        GRASS_DENSITY: _r.random(0,400),
         PATH_MODE: false,
         //NIGHT_MODE: true,
         EFFECT: false

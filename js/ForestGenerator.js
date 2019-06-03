@@ -615,7 +615,7 @@ function ForestGenerator(forestOptions, treeOptions) {
             var newBush = _bush(_r.random(bushHeight*50,bushHeight*80),bushWidth*8,backBushCols,leafSize*4, leafWidth*4);
             newBush.position.z = _r.random(_RIDGE_Z2 - (_RIDGE_Z2-_RIDGE_Z1)/4, _RIDGE_Z2);
             newBush.position.x = _r.randomSign(_r.random(0,500));
-            newBush.position.y = -1;
+            newBush.position.y = -5;
             _forest.add(newBush);
         }
     }
@@ -885,22 +885,31 @@ function ForestGenerator(forestOptions, treeOptions) {
 
     function _grassBlade(){
 
-        let grassHeight = _r.randomInt(5,8);
-        let grassWidth = 0.6;
-        let grassCol = _rainbow ? _c.randomHex() : _c.brightenByAmt(_r.randomFrom(GROUND_COLS),-10);
-        let bend = _r.random(0,0.3);
+        let grassHeight = _r.randomInt(5,12);
+        let grassWidth = grassHeight/_r.random(8,12);
+        let tipCol = _rainbow ? _c.randomHex() : _c.mixHexCols(SKY_COL,"#008800",0.7,0.3);
+        let baseCol = _c.mixHexCols("#003322",GROUND_COL,0.3,0.7);
+        let bend = _r.random(0,0.05);
         //(baseLength, distanceFromTip, distanceFromRoot, fullTreeDepth, minRad, maxRad)
-        var root = _grassSegment(0.01, grassHeight, 0, grassHeight, grassWidth, grassWidth, grassCol);
+        var root = _grassSegment(0.01, grassHeight, 0, grassHeight, grassWidth, grassWidth, baseCol);
         let workingRoot = root;
         for (let i = 0; i < grassHeight; i++) {
 
-            var topRad = grassWidth*((grassHeight-(i+1))/grassHeight);
-            var botRad = grassWidth*((grassHeight -i)/grassHeight);
+            let topRad = grassWidth*((grassHeight-(i+1))/grassHeight);
+            let botRad = grassWidth*((grassHeight -i)/grassHeight);
             
-            let segment = _grassSegment(_treeOptions.BRANCH_L/8, grassHeight-i, i, grassHeight, topRad, botRad, grassCol);
+            let workingCol = _c.mixHexCols(baseCol,tipCol,(grassHeight-i)/grassHeight,i/grassHeight);
+            
+            let segment = _grassSegment(_treeOptions.BRANCH_L/8, grassHeight-i, i, grassHeight, topRad, botRad, workingCol);
 
             segment.scale.x = 0.05;
-            segment.rotation.x = bend;
+            workingBend = bend;
+            if(Math.random()>0.9){
+                bend += _r.random(0.1,0.3);
+            } else if (Math.random()>0.7){
+                workingBend += _r.random(0.1,0.3);
+            }
+            segment.rotation.x = workingBend;
             workingRoot.tip.add(segment);
             workingRoot = segment;
         }
@@ -1007,10 +1016,10 @@ function ForestGenerator(forestOptions, treeOptions) {
                 for(let k=0; k<numInCluster; k++){
                     let blade = _grassBlade();
                     blade.position.x = clumpPos.x + _r.randomSign(_r.random(0,clusterSize));
-                    blade.position.y = clumpPos.y + _r.randomSign(_r.random(0,clusterSize));
+                    blade.position.y = clumpPos.y;
                     blade.position.z = clumpPos.z + _r.randomSign(_r.random(0,clusterSize));
-                    blade.scale.x = blade.scale.z = _r.random(0.3,1);
-                    blade.scale.y = blade.scale.x*1.5;
+                    blade.scale.x = blade.scale.z = _r.random(0.1,0.5);
+                    blade.scale.y = blade.scale.x*(_r.random(1,2));
                     _forest.add(blade);
                 }
                 

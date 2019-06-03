@@ -191,7 +191,7 @@ function DeciduousTrees(options) {
         var radiusTop = baseRadius(Math.max(0, distanceFromTip - 1), distanceFromRoot + 1);
 
         var cylGeom = new THREE.CylinderGeometry(radiusTop, radiusBottom, referenceLength, 8);
-        var sphGeom = new THREE.SphereGeometry(radiusTop, 2, 2);
+        var sphGeom = new THREE.SphereGeometry(radiusBottom*1.1, 3, 3);
         var hex;
 
         var propBtm = (fullTreeDepth - distanceFromRoot) / fullTreeDepth;
